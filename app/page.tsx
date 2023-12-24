@@ -20,11 +20,11 @@ const Home = async () => {
       <Feed />
       {/* <main className=sm:hidden mt-5 flex flex-col'> */}
       {/* <div className='sm:hidden flex relative'> */}
-      <div className='w-[1300px] max-w-full px-4 mx-auto'>
+      {/* <div className='w-[1300px] max-w-full px-4 mx-auto'>
         <UpcomingMovies upcomingMovies={upcomingMovies} />
         <PopularMovies popularMovies={popularMovies} />
         <TopRatedMovies topRatedMovies={topRatedMovies} />
-      </div>
+      </div> */}
       {/* </main> */}
     </section>
   );

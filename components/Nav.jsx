@@ -6,17 +6,17 @@ import { useEffect, useState } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 
 const Nav = () => {
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(true);
   const { data: session } = useSession();
-
+  console.log("session :>> ", session);
   const [providers, setProviders] = useState(null);
   const [toggleDropdown, setToggleDropdown] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      const res = await getProviders();
-      setProviders(res);
-    })();
+    const setUpProviders = async () => {
+      const response = await getProviders();
+      setProviders(response);
+    };
+    setUpProviders();
   }, []);
 
   return (
@@ -34,8 +34,7 @@ const Nav = () => {
 
       {/* Desktop Navigation */}
       <div className='sm:flex hidden'>
-        {/* {session?.user ? ( */}
-        {isUserLoggedIn ? (
+        {session?.user ? (
           <div className='flex gap-3 md:gap-5'>
             <Link href='/create-prompt' className='black_btn'>
               Create Post
@@ -57,31 +56,28 @@ const Nav = () => {
           </div>
         ) : (
           <>
-            {/* {providers &&
-              Object.values(providers).map((provider) => ( */}
-            <button
-              type='button'
-              // key={provider.name}
-              onClick={() => {
-                // signIn(provider.id);
-                setIsUserLoggedIn(true);
-              }}
-              className='black_btn'>
-              Sign in
-            </button>
-            {/* ))} */}
+            {providers &&
+              Object.values(providers).map((provider) => (
+                <button
+                  type='button'
+                  key={provider.name}
+                  onClick={() => {
+                    signIn(provider.id);
+                  }}
+                  className='black_btn'>
+                  Sign in
+                </button>
+              ))}
           </>
         )}
       </div>
 
       {/* Mobile Navigation */}
       <div className='sm:hidden flex relative'>
-        {/* {session?.user ? ( */}
-        {isUserLoggedIn ? (
+        {session?.user ? (
           <div className='flex'>
             <Image
-              // src={session?.user.image}
-              src='/assets/images/logo.svg'
+              src={session?.user.image}
               width={37}
               height={37}
               className='rounded-full'
