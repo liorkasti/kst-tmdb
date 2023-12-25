@@ -7,7 +7,6 @@ import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 
 const Nav = () => {
   const { data: session } = useSession();
-  console.log("session :>> ", session);
   const [providers, setProviders] = useState(null);
   const [toggleDropdown, setToggleDropdown] = useState(false);
 
@@ -20,7 +19,7 @@ const Nav = () => {
   }, []);
 
   return (
-    <nav className='flex-between w-full mb-16 pt-3'>
+    <nav className='flex-between w-full mb-16 pt-3 '>
       <Link href='/' className='flex gap-2 flex-center'>
         <Image
           src='/assets/images/logo.svg'
@@ -38,6 +37,10 @@ const Nav = () => {
           <div className='flex gap-3 md:gap-5'>
             <Link href='/create-prompt' className='black_btn'>
               Create Post
+            </Link>
+
+            <Link href='/favorites' className='black_btn'>
+              Favorites
             </Link>
 
             <button type='button' onClick={signOut} className='outline_btn'>
