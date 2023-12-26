@@ -39,8 +39,8 @@ const Nav = () => {
               Create Post
             </Link>
 
-            <Link href='/favorites' className='black_btn'>
-              Favorites
+            <Link href='/watch-list' className='black_btn'>
+              Watch List
             </Link>
 
             <button type='button' onClick={signOut} className='outline_btn'>
