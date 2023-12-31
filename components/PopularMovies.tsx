@@ -1,6 +1,7 @@
+import { MovieType } from "@config";
 import MoviesList from "./MovieList";
 
-const PopularMovies = ({ popularMovies }: { popularMovies: any }) => {
+const PopularMovies = ({ popularMovies }: { popularMovies: MovieType[] }) => {
   return (
     <MoviesList
       movies={popularMovies}

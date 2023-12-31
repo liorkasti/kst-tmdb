@@ -1,6 +1,14 @@
 import PromptCard from "./PromptCard";
+import MoviesList from "./MovieList";
 
-const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
+const Profile = ({
+  name,
+  desc,
+  myPosts,
+  handleEdit,
+  handleDelete,
+  myMovies,
+}) => {
   return (
     <section className='w-full'>
       <h1 className='head_text text-left'>
@@ -9,7 +17,7 @@ const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
       <p className='desc text-left'>{desc}</p>
 
       <div className='mt-10 prompt_layout'>
-        {data.map((post) => (
+        {myPosts.map((post) => (
           <PromptCard
             key={post._id}
             post={post}
@@ -18,6 +26,11 @@ const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
           />
         ))}
       </div>
+      <MoviesList
+        movies={myMovies}
+        title={"Watch List"}
+        category={"myProfile"}
+      />
     </section>
   );
 };

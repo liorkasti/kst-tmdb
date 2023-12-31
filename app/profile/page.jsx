@@ -11,6 +11,7 @@ const MyProfile = () => {
   const { data: session } = useSession();
 
   const [myPosts, setMyPosts] = useState([]);
+  const [myMovies, setMyMovies] = useState([]);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -19,8 +20,17 @@ const MyProfile = () => {
 
       setMyPosts(data);
     };
+    const fetchWatchList = async () => {
+      const response = await fetch(`/api/users/${session?.user.id}/watch_list`);
+      const data = await response.json();
 
-    if (session?.user.id) fetchPosts();
+      setMyMovies(data);
+    };
+
+    if (session?.user.id) {
+      fetchPosts();
+      fetchWatchList();
+    }
   }, [session?.user.id]);
 
   const handleEdit = (post) => {
@@ -51,7 +61,8 @@ const MyProfile = () => {
     <Profile
       name='My'
       desc='Welcome to your personalized profile page. Share your exceptional prompts and inspire others with the power of your imagination'
-      data={myPosts}
+      myPosts={myPosts}
+      myMovies={myMovies}
       handleEdit={handleEdit}
       handleDelete={handleDelete}
     />

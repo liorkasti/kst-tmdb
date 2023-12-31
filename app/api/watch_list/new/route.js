@@ -2,14 +2,13 @@ import Movie from "@models/movie";
 import { connectToDB } from "@utils/database";
 
 export const POST = async (request) => {
-  const { user, movieId, title, poster_path, vote_average } =
-    await request.json();
+  const { userId, id, title, poster_path, vote_average } = await request.json();
 
   try {
     await connectToDB();
     const newMovie = new Movie({
-      creator: user.id,
-      movieId,
+      creator: userId,
+      id,
       title,
       poster_path,
       vote_average,

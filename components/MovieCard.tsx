@@ -1,64 +1,47 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { EMPTY_MOVIE_URL, IMAGE_URL } from "@config";
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
+import { EMPTY_MOVIE_URL, IMAGE_URL, MovieCardType, MovieType } from "@config";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
+import { useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
-export type MovieType = {
-  id: number;
-  title: string;
-  poster_path: string;
-  vote_average: number;
-};
-
-const MovieCard = ({ movie }: { movie: MovieType }) => {
-  const [favorites, setAllFavorites] = useState([]);
+const MovieCard = ({
+  movie,
+  myMovies,
+  onSelect,
+}: // isWatchList,
+MovieCardType) => {
   const { data: session } = useSession();
-  const [isFavoriteMovie, setIsFavoriteMovie] = useState(false);
+  const [isListed, setIsListed] = useState(false);
+  const searchParams = useSearchParams();
 
-  const fetchFavorites = async () => {
-    const response = await fetch("/api/movie");
-    const data = await response.json();
-
-    setAllFavorites(data);
-  };
-
-  useEffect(() => {
-    fetchFavorites();
-  }, []);
-
-  const handleToggleFavorite = async () => {
+  const handleToggle = async () => {
     try {
-      const { id, title, poster_path, vote_average } = movie;
-      const response = await fetch("/api/watch-list/new", {
-        method: "POST",
-        body: JSON.stringify({
-          user: session?.user,
-          movieId: id,
-          title,
-          poster_path,
-          vote_average,
-        }),
-      });
+      setIsListed((prevIsListed) => !prevIsListed);
+      onSelect(movie);
+      console.log("movie :>> ", movie);
     } catch (error) {
       console.log(error);
     } finally {
-      setIsFavoriteMovie(true);
+      setIsListed(true);
     }
   };
+
+  // const isWatchList = async (id: number): Promise<boolean> => {
+  //   console.log(myMovies?.some((m: any) => m.id === id));
+  //   return myMovies?.some((m: any) => m.id === id);
+  // };
 
   return (
     <div className='w-full flex flex-col'>
       <div className='w-full h-[400px] relative'>
         {session?.user && (
           <button
-            onClick={handleToggleFavorite}
+            onClick={() => handleToggle()}
             className='absolute top-5 right-5 z-10 outline-none'>
-            {isFavoriteMovie ? (
+            {isListed ? (
               <FaHeart size={20} color='#ff0000' fill='#ffffff' />
             ) : (
               <FaRegHeart size={20} color='#ff0000' fill='#ffffff' />

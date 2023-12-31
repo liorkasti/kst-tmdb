@@ -5,7 +5,7 @@ const MovieSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
-  movieId: {
+  id: {
     type: Number,
   },
   title: {
