@@ -5,34 +5,33 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import MovieCard from "./MovieCard";
+import { useFetchWatchList } from "@app/hooks/useFetch";
 
-export const fetchWatchList = async () => {
-  const response = await fetch("/api/watch-list");
-  return await response.json();
-};
-
-const MoviesList = ({ movies, title, category }: MoviesListType) => {
+const MoviesList = ({ movies, title, category, flagHP }: MoviesListType) => {
   const { data: session } = useSession();
   const [myMovies, setMyMovies] = useState<MovieType[]>([]);
 
-  const fetchMovieList = async () => {
-    const response = await fetch("/api/watch_list");
-    const data = await response.json();
-    setMyMovies(await data);
+  const fetchWatchList = async () => {
+    setMyMovies(await useFetchWatchList());
   };
 
   useEffect(() => {
-    if (session?.user?.name) fetchMovieList();
+    if (session?.user?.name) fetchWatchList();
   }, [myMovies]);
 
   useEffect(() => {
-    if (session?.user?.name) fetchMovieList();
+    if (session?.user?.name) fetchWatchList();
   }, [session?.user?.name]);
+
+  const isMovieExist = (id: number): boolean => {
+    return myMovies?.some((item: MovieType) => item.id === id);
+  };
 
   const toggleMovie = async (movie: MovieType) => {
     const { id, title, poster_path, vote_average } = movie;
     try {
       if (isMovieExist(id)) {
+        // TODO: debug and fix items order when deleting
         const idx = myMovies.findIndex((item) => item.id === id);
         await fetch(`./api/watch_list/${myMovies[idx]}`, {
           method: "DELETE",
@@ -52,14 +51,10 @@ const MoviesList = ({ movies, title, category }: MoviesListType) => {
     } catch (error) {
       console.log("Error Toggle Movie to Watch List: ", error);
     } finally {
-      () => {
-        fetchMovieList();
+      async () => {
+        await fetchWatchList();
       };
     }
-  };
-
-  const isMovieExist = (id: number): boolean => {
-    return myMovies?.some((item: MovieType) => item.id === id);
   };
 
   return (
@@ -86,7 +81,6 @@ const MoviesList = ({ movies, title, category }: MoviesListType) => {
               key={m.id}
               movie={m}
               onSelect={(m: MovieType) => toggleMovie(m)}
-              myMovies={myMovies}
               isListed={isMovieExist(m.id)}
             />
           ))}
@@ -98,7 +92,6 @@ const MoviesList = ({ movies, title, category }: MoviesListType) => {
               key={m.id}
               movie={m}
               onSelect={(m: MovieType) => toggleMovie(m)}
-              myMovies={myMovies}
               isListed={isMovieExist(m.id)}
             />
           ))}

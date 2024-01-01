@@ -1,10 +1,7 @@
 import Movie from "@models/movie";
-import { connectToDB } from "@utils/database";
 
 export const DELETE = async (request, { params }) => {
   try {
-    console.log("PARAMS :>> ", { params, request });
-
     // Find the movie by ID and remove it
     await Movie.findOneAndRemove(params._id);
 

@@ -1,16 +1,13 @@
-import { MovieType } from "@config";
+import { MoviesCategoryType } from "@config";
 import MoviesList from "./MovieList";
 
-const UpcomingMovies = ({
-  upcomingMovies,
-}: {
-  upcomingMovies: MovieType[];
-}) => {
+const UpcomingMovies = ({ movies, flagHP }: MoviesCategoryType) => {
   return (
     <MoviesList
-      movies={upcomingMovies}
+      movies={movies}
       title={"Upcoming Movies"}
       category={"/movies/upcoming"}
+      flagHP={flagHP}
     />
   );
 };

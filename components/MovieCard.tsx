@@ -1,33 +1,21 @@
 "use client";
 
-import { EMPTY_MOVIE_URL, IMAGE_URL, MovieCardType, MovieType } from "@config";
+import { EMPTY_MOVIE_URL, IMAGE_URL, MovieCardType } from "@config";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
-import { useState } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
-const MovieCard = ({ movie, myMovies, onSelect, isListed }: MovieCardType) => {
+const MovieCard = ({ movie, onSelect, isListed }: MovieCardType) => {
   const { data: session } = useSession();
-  // const [isListed, setIsListed] = useState(false);
-  const searchParams = useSearchParams();
 
   const handleToggle = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     try {
-      // setIsListed((prevIsListed) => !prevIsListed);
       onSelect(movie);
     } catch (error) {
       console.log(error);
-    } finally {
-      // setIsListed(true);
     }
   };
-
-  // const isWatchList = async (id: number): Promise<boolean> => {
-  //   console.log(myMovies?.some((m: any) => m.id === id));
-  //   return myMovies?.some((m: any) => m.id === id);
-  // };
 
   return (
     <div className='w-full flex flex-col'>

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import Profile from "@components/Profile";
+import { useFetchWatchList } from "@app/hooks/useFetch";
 
 const MyProfile = () => {
   const router = useRouter();
@@ -17,14 +18,10 @@ const MyProfile = () => {
     const fetchPosts = async () => {
       const response = await fetch(`/api/users/${session?.user.id}/posts`);
       const data = await response.json();
-
       setMyPosts(data);
     };
     const fetchWatchList = async () => {
-      const response = await fetch(`/api/users/${session?.user.id}/watch_list`);
-      const data = await response.json();
-
-      setMyMovies(data);
+      setMyMovies(await useFetchWatchList());
     };
 
     if (session?.user.id) {
@@ -32,6 +29,16 @@ const MyProfile = () => {
       fetchWatchList();
     }
   }, [session?.user.id]);
+
+  useEffect(() => {
+    const fetchWatchList = async () => {
+      setMyMovies(await useFetchWatchList());
+    };
+
+    if (session?.user.id) {
+      fetchWatchList();
+    }
+  }, [myMovies]);
 
   const handleEdit = (post) => {
     router.push(`/update-prompt?id=${post._id}`);

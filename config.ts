@@ -19,20 +19,24 @@ export type MovieType = {
   title: string;
   poster_path: string;
   vote_average: number;
-  // isWatchList: boolean;
 };
 
 export type MoviesListType = {
   movies: MovieType[];
+  flagHP?: boolean;
   title: string;
   category: string;
 };
 
 export type MovieCardType = {
   movie: any;
-  myMovies: MovieType[];
   onSelect: (m: MovieType) => void;
   isListed: boolean;
+};
+
+export type MoviesCategoryType = {
+  movies: MovieType[];
+  flagHP?: boolean;
 };
 
 export interface ProviderProps {

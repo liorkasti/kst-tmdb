@@ -1,12 +1,13 @@
-import { MovieType } from "@config";
+import { MoviesCategoryType } from "@config";
 import MoviesList from "./MovieList";
 
-const PopularMovies = ({ popularMovies }: { popularMovies: MovieType[] }) => {
+const PopularMovies = ({ movies, flagHP }: MoviesCategoryType) => {
   return (
     <MoviesList
-      movies={popularMovies}
+      movies={movies}
       title={"Popular Movies"}
       category={"/movies/popular"}
+      flagHP={flagHP}
     />
   );
 };
