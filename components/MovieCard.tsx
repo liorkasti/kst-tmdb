@@ -7,25 +7,20 @@ import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
-const MovieCard = ({
-  movie,
-  myMovies,
-  onSelect,
-}: // isWatchList,
-MovieCardType) => {
+const MovieCard = ({ movie, myMovies, onSelect, isListed }: MovieCardType) => {
   const { data: session } = useSession();
-  const [isListed, setIsListed] = useState(false);
+  // const [isListed, setIsListed] = useState(false);
   const searchParams = useSearchParams();
 
-  const handleToggle = async () => {
+  const handleToggle = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
     try {
-      setIsListed((prevIsListed) => !prevIsListed);
+      // setIsListed((prevIsListed) => !prevIsListed);
       onSelect(movie);
-      console.log("movie :>> ", movie);
     } catch (error) {
       console.log(error);
     } finally {
-      setIsListed(true);
+      // setIsListed(true);
     }
   };
 
@@ -39,7 +34,7 @@ MovieCardType) => {
       <div className='w-full h-[400px] relative'>
         {session?.user && (
           <button
-            onClick={() => handleToggle()}
+            onClick={handleToggle}
             className='absolute top-5 right-5 z-10 outline-none'>
             {isListed ? (
               <FaHeart size={20} color='#ff0000' fill='#ffffff' />

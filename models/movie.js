@@ -7,6 +7,7 @@ const MovieSchema = new Schema({
   },
   id: {
     type: Number,
+    ref: "Movie",
   },
   title: {
     type: String,

@@ -32,6 +32,7 @@ export type MovieCardType = {
   movie: any;
   myMovies: MovieType[];
   onSelect: (m: MovieType) => void;
+  isListed: boolean;
 };
 
 export interface ProviderProps {

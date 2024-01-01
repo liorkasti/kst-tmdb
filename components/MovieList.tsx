@@ -1,13 +1,10 @@
 "use client";
 
-import { MovieCardType, MovieType, MoviesListType } from "@config";
-import Link from "next/link";
-import MovieCard from "./MovieCard";
-import { useSearchParams } from "next/navigation";
+import { MovieType, MoviesListType } from "@config";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
-import Movie from "@models/movie";
-import { connectToDB } from "@utils/database";
+import MovieCard from "./MovieCard";
 
 export const fetchWatchList = async () => {
   const response = await fetch("/api/watch-list");
@@ -16,23 +13,18 @@ export const fetchWatchList = async () => {
 
 const MoviesList = ({ movies, title, category }: MoviesListType) => {
   const { data: session } = useSession();
-  const searchParams = useSearchParams();
-
-  const [moviesList, setMovieList] = useState([]);
   const [myMovies, setMyMovies] = useState<MovieType[]>([]);
-
-  const userName = searchParams.get("name");
 
   const fetchMovieList = async () => {
     const response = await fetch("/api/watch_list");
     const data = await response.json();
-    console.log("data :>> ", await data);
     setMyMovies(await data);
   };
 
   useEffect(() => {
     if (session?.user?.name) fetchMovieList();
-  }, []);
+  }, [myMovies]);
+
   useEffect(() => {
     if (session?.user?.name) fetchMovieList();
   }, [session?.user?.name]);
@@ -41,21 +33,12 @@ const MoviesList = ({ movies, title, category }: MoviesListType) => {
     const { id, title, poster_path, vote_average } = movie;
     try {
       if (isMovieExist(id)) {
-        console.log("OK", isMovieExist(id));
-        const response = await fetch(`./api/watch_list/${movie}`, {
+        const idx = myMovies.findIndex((item) => item.id === id);
+        await fetch(`./api/watch_list/${myMovies[idx]}`, {
           method: "DELETE",
         });
-        console.log("DELETE", isMovieExist(id), response);
-        if (response.ok) {
-          const filteredMovies = myMovies.filter(
-            (item: MovieType) => item.id !== movie.id
-          );
-
-          setMyMovies(filteredMovies);
-          console.log("finally", filteredMovies);
-        }
       } else {
-        const response = await fetch(`./api/watch_list/new`, {
+        await fetch(`./api/watch_list/new`, {
           method: "POST",
           body: JSON.stringify({
             user: session?.user,
@@ -65,19 +48,13 @@ const MoviesList = ({ movies, title, category }: MoviesListType) => {
             vote_average,
           }),
         });
-
-        setMyMovies(myMovies.filter((item: MovieType) => item.id !== movie.id));
-        if (response.ok) {
-          console.log("OK");
-        }
       }
-      // await fetch(`/api/profile/${movie}`, {
-      //   method: "DELETE",
-      // });
     } catch (error) {
       console.log("Error Toggle Movie to Watch List: ", error);
     } finally {
-      console.log("finally", myMovies);
+      () => {
+        fetchMovieList();
+      };
     }
   };
 
@@ -110,6 +87,7 @@ const MoviesList = ({ movies, title, category }: MoviesListType) => {
               movie={m}
               onSelect={(m: MovieType) => toggleMovie(m)}
               myMovies={myMovies}
+              isListed={isMovieExist(m.id)}
             />
           ))}
         </div>
@@ -117,10 +95,11 @@ const MoviesList = ({ movies, title, category }: MoviesListType) => {
         <div className='sm:hidden flex relative grid grid-cols-1 mt-4 gap-4'>
           {movies?.map((m: MovieType) => (
             <MovieCard
-              // key={m.id}
+              key={m.id}
               movie={m}
               onSelect={(m: MovieType) => toggleMovie(m)}
               myMovies={myMovies}
+              isListed={isMovieExist(m.id)}
             />
           ))}
         </div>

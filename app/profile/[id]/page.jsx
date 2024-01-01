@@ -20,7 +20,7 @@ const UserProfile = ({ params }) => {
     };
 
     const fetchWatchList = async () => {
-      const response = await fetch(`/api/users/${params.id}/watch_list`);
+      const response = await fetch(`/api/users/${params?.id}/watch_list`);
       const data = await response.json();
       setUserMovies(data);
     };
