@@ -4,7 +4,7 @@ A movie app that allows users to view and search for movies, and see details of 
 
 ## Getting Started
 
-1. Clone the repository: `[git clone https://github.com/liorkasti/kst-tmdb.git](https://github.com/liorkasti/kst-tmdb-nextjs.git)`
+1. Clone the repository: `https://github.com/liorkasti/kst-tmdb-nextjs.git`
 2. Install dependencies: `npm install`
 3. Start the development server: `npm run dev`
 
